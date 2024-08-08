@@ -2,7 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import gmapsApiKey from './credentials'
 
-const API_key = gmapsApiKey
+//const API_key = gmapsApiKey
+const API_key = process.env.REACT_APP_GMAPS_API_KEY
 const endpoint_search= `https://places.googleapis.com/v1/places:searchText?key=${API_key}`
 
 async function getSearchResults (business = '',location ='',filter='bestMatch') {
