@@ -2,21 +2,7 @@ import { Button, FormControl, Input, Stack, Box, HStack, Text } from '@chakra-ui
 import { SearchIcon } from '@chakra-ui/icons';
 import React, {useState} from 'react'
 
-function Search () {
-  const [searchTerm,setSearchTerm] = useState({})
-
-  const handleChange = ({target}) => {
-    const {name,value} =target
-    setSearchTerm((prev)=> (
-      {...prev,[name]:value}
-    ))
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    alert(JSON.stringify(searchTerm,"",2))
-  }
-
+function Search ({onChange,onClick}) {
     return (
         <Stack bgColor='white' width='100%' height="150px" alignContent={"center"} justifyContent={"center"} align='center'>
             <Box 
@@ -29,7 +15,7 @@ function Search () {
 >
   <HStack spacing={4} divider={<Box borderLeft='1px' borderColor='gray.200' height='30px' />}>
     <Box flex={1}>
-      <Input onChange={handleChange}
+      <Input onChange={onChange}
         name="searchBusiness"
         variant='unstyled' 
         placeholder='Search Business' 
@@ -39,7 +25,7 @@ function Search () {
       />
     </Box>
     <Box>
-      <Input onChange={handleChange}
+      <Input onChange={onChange}
         name="location"
         variant='unstyled' 
         placeholder='Where?' 
@@ -48,7 +34,7 @@ function Search () {
         textAlign={['left','center']}
       />
     </Box>
-    <Button onClick={handleSubmit} type="submit"
+    <Button onClick={onClick} type="submit"
       colorScheme='red' 
       borderRadius='full' 
       size='lg' 

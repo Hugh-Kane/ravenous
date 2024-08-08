@@ -1,40 +1,32 @@
 import { Button, Divider, HStack, Stack, Box } from '@chakra-ui/react'
 import React, {useState} from 'react'
 
-function Filter() {
-    const [filter,setFilter] = useState("bestMatch")
-
-    function handleClick (event) {
-        const {name} = event.target
-        setFilter(name)
-        alert(JSON.stringify(filter,"",2))
-
-    }
+function Filter({onClick, searchTerm}) {
     return (
         <Stack bgColor='white'  height="100px" alignContent={"center"} justifyContent={"center"} align='center'>
             <Box width='auto'>
             <HStack>
                 <Button
-                    bgColor={'white'}
+                    bgColor={searchTerm.filter === "bestMatch" ? 'gray.200' : 'white'}
                     name="bestMatch"
-                    onClick={handleClick}
+                    onClick={onClick}
                     >
                     Best Match
                 </Button>
                 <Button
-                    bgColor={'white'}
-                    name="highyRated"
-                    onClick={handleClick}
+                    bgColor={searchTerm.filter === "openNow" ? 'gray.200' : 'white'}
+                    name="openNow"
+                    onClick={onClick}
                     >
-                    Highly Rated
+                    Open Now
                 </Button>
                     
                 <Button
-                    bgColor={'white'}
-                    name="mostViewed"
-                    onClick={handleClick}
+                    bgColor={searchTerm.filter === "budget" ? 'gray.200' : 'white'}
+                    name="budget"
+                    onClick={onClick}
                     >
-                    Most Viewed
+                    Save Me Some $$$
                 </Button>
             
             </HStack>

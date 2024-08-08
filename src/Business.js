@@ -1,37 +1,48 @@
-import { Box, Card, CardBody, HStack, Heading, Image, Stack, Text, StackDivider } from '@chakra-ui/react'
+import { Box, Card, CardBody, HStack, Heading, Image, Stack, Text, StackDivider, Badge } from '@chakra-ui/react'
 import React from 'react'
 
 function Business ({business}) {
+    
+    const openNow = business.currentOpeningHours.openNow
+    
     return (
         <>
         <div className="business">
-        <Card>
-            <CardBody>
+        <Card width="280x" height="400px" m={2}>
+            <CardBody display="flex" flexDirection="column" alignItems="center">
+                <HStack width="100%" justifyContent="space-between">
+                    <Box>
+                        <Badge colorScheme={openNow? 'green':'red'}>{openNow? 'Open' : 'Closed'}</Badge>
+                    </Box>
+                    <Box>
+                        <Badge variant='outline' colorScheme='yellow'>{business.priceLevel}</Badge>
+                    </Box>
+                </HStack>
                 <Box
                         position="relative" 
                         width="200px" 
                         height="200px" 
-                        overflow="hidden" 
+                        overflow="hidden"
+                        display="flex"
+                        justifyContent="center"                        
+                        alignItems="center"
                     >
                     <Image 
-                        src={business.imageSrc}
+                        src={business.photoUrl}
                         objectFit='cover'
-                        alt='Green double couch with wooden legs'
+                        alt= {`Photo of ${business.displayName}`}
                         borderRadius='lg'
                 />
                 </Box>
-            <Heading size='md'>{business.name}</Heading>
+            <Heading size='md' textAlign="center">{business.displayName.text}</Heading>
             <HStack divider={<StackDivider borderColor='gray.200' />} mt='6' spacing='2'>
                 <Box>
-                    <Text fontSize='xs'>{business.address}</Text>
-                    <Text fontSize='xs'>{business.city}</Text>
-                    <Text fontSize='xs'>{business.state}</Text>
-                    <Text fontSize='xs'>{business.zipcode}</Text>
+                    <Text fontSize='xs' noOfLines={4} width="100%">{business.shortFormattedAddress}</Text>
                 </Box>
                 <Box>
-                    <Text fontSize='xs'>{business.category}</Text>
+                    <Badge>{business.types[0]}</Badge>
                     <Text fontSize='xs'>{business.rating} ⭐</Text>
-                    <Text fontSize='xs'>{business.reviewCount} reviews</Text>
+                    <Text fontSize='xs' ml={1}>{business.userRatingCount} reviews</Text>
                 </Box>
             </HStack>
             </CardBody>
