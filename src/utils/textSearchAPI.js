@@ -39,7 +39,7 @@ async function getSearchResults (business = '',location ='',filter='bestMatch') 
             data: {
                 textQuery: textQuery,
                 includedType: "restaurant",
-                pageSize: 5
+                pageSize: 20
 
             }
         }
