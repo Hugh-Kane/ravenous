@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import gmapsApiKey from './credentials'
+//import gmapsApiKey from './credentials'
 
 //const API_key = gmapsApiKey
 const API_key = process.env.REACT_APP_GMAPS_API_KEY
