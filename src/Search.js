@@ -10,9 +10,10 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 
-function Search({ onChange, onClick }) {
+function Search({ onChange, onSubmit }) {
   function handleKeyPress(event) {
-    if (event.key === "enter") {
+    if (event.key === "Enter") {
+      onSubmit(event);
     }
   }
 
@@ -24,10 +25,11 @@ function Search({ onChange, onClick }) {
       alignContent={"center"}
       justifyContent={"center"}
       align="center"
+      onKeyDown={handleKeyPress}
     >
       <Box
         bgColor="white"
-        width="100%"
+        width="90%"
         maxWidth="800px"
         borderRadius="full"
         boxShadow="2xl"
@@ -35,6 +37,7 @@ function Search({ onChange, onClick }) {
       >
         <HStack
           spacing={4}
+          justifyContent="center"
           divider={
             <Box borderLeft="1px" borderColor="gray.200" height="30px" />
           }
@@ -50,7 +53,7 @@ function Search({ onChange, onClick }) {
               textAlign={["left", "center"]}
             />
           </Box>
-          <Box>
+          <Box flex={1}>
             <Input
               onChange={onChange}
               name="location"
@@ -62,7 +65,7 @@ function Search({ onChange, onClick }) {
             />
           </Box>
           <Button
-            onClick={onClick}
+            onClick={onSubmit}
             type="submit"
             colorScheme="red"
             borderRadius="full"

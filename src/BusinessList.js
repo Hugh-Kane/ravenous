@@ -1,8 +1,9 @@
 import React from "react";
 import Business from "./Business";
+import BusinessFindMore from "./BusinessFindMore";
 import { Box, SimpleGrid } from "@chakra-ui/react";
 
-function BusinessList({ businesses }) {
+function BusinessList({ businesses, handleAppendResults }) {
   return (
     <Box
       className="business-list"
@@ -27,6 +28,7 @@ function BusinessList({ businesses }) {
         {businesses.map((business, index) => (
           <Business business={business} key={index} />
         ))}
+        <BusinessFindMore onClick={handleAppendResults} />
       </SimpleGrid>
     </Box>
   );

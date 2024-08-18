@@ -13,11 +13,15 @@ function App() {
   const [restaurant, setRestaurant] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState({});
-  //const [filter,setFilter] = useState("bestMatch")
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const [pageToken, setNextPageToken] = useState("");
 
   const handleFilterClick = ({ target }) => {
     const { name } = target;
-    setSearchTerm((prev) => ({ ...prev, filter: name }));
+    if (searchTerm.filter !== name) {
+      setSearchTerm((prev) => ({ ...prev, filter: name }));
+      setShouldFetch(true);
+    }
   };
 
   const handleSearchChange = ({ target }) => {
@@ -27,12 +31,12 @@ function App() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    //alert(JSON.stringify(searchTerm,"",2))
-    fetchData(
-      searchTerm.searchBusiness,
-      searchTerm.location,
-      searchTerm.filter
-    );
+    setShouldFetch(true);
+  };
+
+  const handleAppendResults = (event) => {
+    event.preventDefault();
+    fetchData(true);
   };
 
   const theme = extendTheme({
@@ -46,16 +50,36 @@ function App() {
     },
   });
 
-  async function fetchData(business, location, filter) {
-    const data = await getSearchResults(business, location, filter);
+  async function fetchData(isAppending = false) {
+    if (!isAppending) {
+      setLoading(true);
+    }
+    const [data, nextPageToken] = await getSearchResults(
+      searchTerm.searchBusiness,
+      searchTerm.location,
+      searchTerm.filter,
+      isAppending ? pageToken : undefined
+    );
+    setNextPageToken(nextPageToken);
     console.log("Fetched results:", data);
-    setRestaurant(data);
-    setLoading(false);
+    isAppending
+      ? setRestaurant((prevData) => [...prevData, ...data])
+      : setRestaurant(data);
+    if (!isAppending) {
+      setLoading(false);
+    }
+    setShouldFetch(false);
   }
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (shouldFetch) {
+      fetchData();
+    }
+  }, [shouldFetch]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -63,11 +87,14 @@ function App() {
         <div className="App">
           <Top />
           <Filter onClick={handleFilterClick} searchTerm={searchTerm} />
-          <Search onChange={handleSearchChange} onClick={handleSearchSubmit} />
+          <Search onChange={handleSearchChange} onSubmit={handleSearchSubmit} />
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <BusinessList businesses={restaurant} />
+            <BusinessList
+              businesses={restaurant}
+              handleAppendResults={handleAppendResults}
+            />
           )}
         </div>
       </Box>
