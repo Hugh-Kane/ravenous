@@ -10,22 +10,36 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 
-function Search({ onChange, onSubmit }) {
+function Search({ onSubmit }) {
+  const [localSearchTerm, setLocalSearchTerm] = useState({});
+
+  function handleInputChange({ target }) {
+    const { name, value } = target;
+    setLocalSearchTerm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    onSubmit(localSearchTerm);
+  }
+
   function handleKeyPress(event) {
     if (event.key === "Enter") {
-      onSubmit(event);
+      handleSubmit(event);
     }
   }
 
   return (
     <Stack
+      as="form"
       bgColor="white"
       width="100%"
       height="150px"
       alignContent={"center"}
       justifyContent={"center"}
       align="center"
-      onKeyDown={handleKeyPress}
+      //onKeyDown={handleKeyPress}
+      onSubmit={handleSubmit}
     >
       <Box
         bgColor="white"
@@ -44,7 +58,8 @@ function Search({ onChange, onSubmit }) {
         >
           <Box flex={1}>
             <Input
-              onChange={onChange}
+              onChange={handleInputChange}
+              value={localSearchTerm.searchBusiness}
               name="searchBusiness"
               variant="unstyled"
               placeholder="Search Business"
@@ -55,7 +70,8 @@ function Search({ onChange, onSubmit }) {
           </Box>
           <Box flex={1}>
             <Input
-              onChange={onChange}
+              onChange={handleInputChange}
+              value={localSearchTerm.location}
               name="location"
               variant="unstyled"
               placeholder="Where?"
@@ -65,7 +81,6 @@ function Search({ onChange, onSubmit }) {
             />
           </Box>
           <Button
-            onClick={onSubmit}
             type="submit"
             colorScheme="red"
             borderRadius="full"

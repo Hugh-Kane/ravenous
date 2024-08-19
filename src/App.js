@@ -24,13 +24,8 @@ function App() {
     }
   };
 
-  const handleSearchChange = ({ target }) => {
-    const { name, value } = target;
-    setSearchTerm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
+  const handleSearchSubmit = (localSearchTerm) => {
+    setSearchTerm(localSearchTerm);
     setShouldFetch(true);
   };
 
@@ -76,9 +71,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (shouldFetch) {
-      fetchData();
-    }
+    fetchData();
   }, [shouldFetch]);
 
   return (
@@ -87,7 +80,7 @@ function App() {
         <div className="App">
           <Top />
           <Filter onClick={handleFilterClick} searchTerm={searchTerm} />
-          <Search onChange={handleSearchChange} onSubmit={handleSearchSubmit} />
+          <Search onSubmit={handleSearchSubmit} />
           {loading ? (
             <p>Loading...</p>
           ) : (
