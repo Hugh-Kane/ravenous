@@ -11,7 +11,10 @@ import { SearchIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 
 function Search({ onSubmit }) {
-  const [localSearchTerm, setLocalSearchTerm] = useState({});
+  const [localSearchTerm, setLocalSearchTerm] = useState({
+    searchBusiness: "",
+    location: "",
+  });
 
   function handleInputChange({ target }) {
     const { name, value } = target;

@@ -1,5 +1,11 @@
 import "./App.css";
-import { ChakraProvider, extendTheme, Box, Image } from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  extendTheme,
+  Box,
+  Image,
+  Skeleton,
+} from "@chakra-ui/react";
 import Business from "./Business";
 import businessDetails from "./businessDetails";
 import BusinessList from "./BusinessList";
@@ -11,22 +17,19 @@ import { useState, useEffect } from "react";
 
 function App() {
   const [restaurant, setRestaurant] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState({});
-  const [shouldFetch, setShouldFetch] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState({ filter: "bestMatch" });
   const [pageToken, setNextPageToken] = useState("");
 
   const handleFilterClick = ({ target }) => {
     const { name } = target;
     if (searchTerm.filter !== name) {
       setSearchTerm((prev) => ({ ...prev, filter: name }));
-      setShouldFetch(true);
     }
   };
 
   const handleSearchSubmit = (localSearchTerm) => {
-    setSearchTerm(localSearchTerm);
-    setShouldFetch(true);
+    setSearchTerm((prev) => ({ ...prev, ...localSearchTerm }));
   };
 
   const handleAppendResults = (event) => {
@@ -45,10 +48,17 @@ function App() {
     },
   });
 
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   async function fetchData(isAppending = false) {
+    console.log("this is the search term");
+    console.log(searchTerm);
     if (!isAppending) {
       setLoading(true);
     }
+    await delay(1000);
     const [data, nextPageToken] = await getSearchResults(
       searchTerm.searchBusiness,
       searchTerm.location,
@@ -63,7 +73,6 @@ function App() {
     if (!isAppending) {
       setLoading(false);
     }
-    setShouldFetch(false);
   }
 
   useEffect(() => {
@@ -72,7 +81,7 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, [shouldFetch]);
+  }, [searchTerm]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -81,14 +90,11 @@ function App() {
           <Top />
           <Filter onClick={handleFilterClick} searchTerm={searchTerm} />
           <Search onSubmit={handleSearchSubmit} />
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <BusinessList
-              businesses={restaurant}
-              handleAppendResults={handleAppendResults}
-            />
-          )}
+          <BusinessList
+            businesses={restaurant}
+            handleAppendResults={handleAppendResults}
+            isLoading={isLoading}
+          />
         </div>
       </Box>
     </ChakraProvider>
