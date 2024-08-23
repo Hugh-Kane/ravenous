@@ -15,7 +15,7 @@ function BusinessList({ businesses, handleAppendResults, isLoading }) {
       <SimpleGrid
         spacing={4}
         //templateColumns={['1fr', '1fr 1fr', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
-        columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+        columns={{ base: 1, sm: 2, md: 3, lg: 3, xl: 4 }}
         /*
                 base: 1 column (mobile) 
                 sm: 2 columns (small tablets) 
@@ -23,7 +23,7 @@ function BusinessList({ businesses, handleAppendResults, isLoading }) {
                 lg: 4 columns (large desktops)
             */
         justifyItems="center"
-        p="4"
+        p={4}
       >
         {businesses.map((business, index) => (
           <Business business={business} key={index} isLoading={isLoading} />

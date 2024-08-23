@@ -13,13 +13,22 @@ import Search from "./Search";
 import Filter from "./Filter";
 import Top from "./Top";
 import getSearchResults from "./utils/textSearchAPI";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { debounce } from "lodash";
 
 function App() {
   const [restaurant, setRestaurant] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState({ filter: "bestMatch" });
   const [pageToken, setNextPageToken] = useState("");
+
+  const pageTokenRef = useRef(pageToken);
+  const searchTermRef = useRef(searchTerm);
+
+  useEffect(() => {
+    pageTokenRef.current = pageToken;
+    searchTermRef.current = searchTerm;
+  }, [pageToken, searchTerm]);
 
   const handleFilterClick = ({ target }) => {
     const { name } = target;
@@ -32,11 +41,13 @@ function App() {
     setSearchTerm((prev) => ({ ...prev, ...localSearchTerm }));
   };
 
-  const handleAppendResults = (event) => {
-    event.preventDefault();
-    fetchData(true);
-  };
-
+  const handleDebouncedAppendResults = useCallback(
+    debounce((event) => {
+      event.preventDefault();
+      fetchData(true);
+    }, 500),
+    []
+  );
   const theme = extendTheme({
     styles: {
       global: {
@@ -60,10 +71,10 @@ function App() {
     }
     await delay(1000);
     const [data, nextPageToken] = await getSearchResults(
-      searchTerm.searchBusiness,
-      searchTerm.location,
-      searchTerm.filter,
-      isAppending ? pageToken : undefined
+      searchTermRef.current.searchBusiness,
+      searchTermRef.current.location,
+      searchTermRef.current.filter,
+      isAppending ? pageTokenRef.current : undefined
     );
     setNextPageToken(nextPageToken);
     console.log("Fetched results:", data);
@@ -92,7 +103,7 @@ function App() {
           <Search onSubmit={handleSearchSubmit} />
           <BusinessList
             businesses={restaurant}
-            handleAppendResults={handleAppendResults}
+            handleAppendResults={handleDebouncedAppendResults}
             isLoading={isLoading}
           />
         </div>

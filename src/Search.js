@@ -65,7 +65,7 @@ function Search({ onSubmit }) {
               value={localSearchTerm.searchBusiness}
               name="searchBusiness"
               variant="unstyled"
-              placeholder="Search Business"
+              placeholder="Search..."
               _placeholder={{ color: "black" }}
               color="black"
               textAlign={["left", "center"]}
