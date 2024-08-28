@@ -5,6 +5,11 @@ import {
   Box,
   Image,
   Skeleton,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Link,
 } from "@chakra-ui/react";
 import Business from "./Business";
 import businessDetails from "./businessDetails";
@@ -15,6 +20,7 @@ import Top from "./Top";
 import getSearchResults from "./utils/textSearchAPI";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { debounce } from "lodash";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 function App() {
   const [restaurant, setRestaurant] = useState([]);
@@ -99,6 +105,25 @@ function App() {
       <Box bg="white" minHeight="100vh">
         <div className="App">
           <Top />
+          <Alert
+            status="error"
+            display="flex"
+            textAlign="center"
+            justifyContent="center"
+          >
+            <AlertIcon />
+            <AlertTitle>Issues with the Load More Results button</AlertTitle>
+            <AlertDescription>
+              Google Maps API is now missing next_page_token in response - more
+              information{" "}
+              <Link
+                href="https://github.com/googleapis/google-cloud-node/issues/5385"
+                isExternal
+              >
+                here <ExternalLinkIcon mx="2px" />
+              </Link>
+            </AlertDescription>
+          </Alert>
           <Filter onClick={handleFilterClick} searchTerm={searchTerm} />
           <Search onSubmit={handleSearchSubmit} />
           <BusinessList
