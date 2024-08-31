@@ -106,25 +106,6 @@ function App() {
       <Box bg="white" minHeight="100vh">
         <div className="App">
           <Top />
-          <Alert
-            status="error"
-            display="flex"
-            textAlign="center"
-            justifyContent="center"
-          >
-            <AlertIcon />
-            <AlertTitle>Issues with the Load More Results button</AlertTitle>
-            <AlertDescription>
-              Google Maps API is now missing next_page_token in response - more
-              information{" "}
-              <Link
-                href="https://github.com/googleapis/google-cloud-node/issues/5385"
-                isExternal
-              >
-                here <ExternalLinkIcon mx="2px" />
-              </Link>
-            </AlertDescription>
-          </Alert>
           <Filter onClick={handleFilterClick} searchTerm={searchTerm} />
           <Search onSubmit={handleSearchSubmit} />
           <BusinessList
