@@ -21,6 +21,7 @@ import getSearchResults from "./utils/textSearchAPI";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { debounce } from "lodash";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const [restaurant, setRestaurant] = useState([]);
@@ -133,6 +134,7 @@ function App() {
           />
         </div>
       </Box>
+      <Analytics />
     </ChakraProvider>
   );
 }
